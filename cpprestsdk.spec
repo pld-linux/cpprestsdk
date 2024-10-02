@@ -7,6 +7,7 @@ License:	MIT
 Group:		Libraries
 Source0:	https://github.com/microsoft/cpprestsdk/archive/v%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	a7f8a8b55cd2f799cb9d712f172b1af1
+Patch0:		%{name}-truncation.patch
 URL:		https://github.com/microsoft/cpprestsdk
 BuildRequires:	boost-devel
 BuildRequires:	cmake >= 3.9
@@ -52,6 +53,7 @@ Pliki nagłówkowe biblioteki cpprest.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 install -d build

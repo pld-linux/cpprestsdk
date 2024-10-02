@@ -1,0 +1,11 @@
+cpprestsdk-2.10.19/Release/src/http/common/http_helpers.cpp:91:43: error: '%8zX' directive output may be truncated writing between 8 and 16 bytes into a region of size 9 [-Werror=format-truncation=]
+--- cpprestsdk-2.10.19/Release/src/http/common/http_helpers.cpp.orig	2023-12-05 05:23:31.000000000 +0100
++++ cpprestsdk-2.10.19/Release/src/http/common/http_helpers.cpp	2024-10-02 20:00:01.788666800 +0200
+@@ -88,6 +88,7 @@ size_t chunked_encoding::add_chunked_del
+ #ifdef _WIN32
+         sprintf_s(buffer, sizeof(buffer), "%8IX", bytes_read);
+ #else
++	if (sizeof(bytes_read) > 4 && bytes_read > 0xFFFFFFFF) bytes_read = 0xFFFFFFFF;
+         snprintf(buffer, sizeof(buffer), "%8zX", bytes_read);
+ #endif
+         memcpy(&data[0], buffer, 8);
