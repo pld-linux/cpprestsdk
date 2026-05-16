@@ -2,16 +2,19 @@ Summary:	C++ Rest SDK
 Summary(pl.UTF-8):	Pakiet programistyczny C++ Rest
 Name:		cpprestsdk
 Version:	2.10.19
-Release:	1
+Release:	2
 License:	MIT
 Group:		Libraries
 Source0:	https://github.com/microsoft/cpprestsdk/archive/v%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	a7f8a8b55cd2f799cb9d712f172b1af1
 Patch0:		%{name}-truncation.patch
+# https://github.com/microsoft/vcpkg/blob/master/ports/cpprestsdk/fix-asio-error.patch
+Patch1:		%{name}-boost-asio.patch
+Patch2:		%{name}-boost.patch
 URL:		https://github.com/microsoft/cpprestsdk
-BuildRequires:	boost-devel
+BuildRequires:	boost-devel >= 1.66
 BuildRequires:	cmake >= 3.9
-BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	libstdc++-devel >= 6:5
 BuildRequires:	openssl-devel
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	websocketpp-devel
@@ -43,7 +46,8 @@ Summary:	Header files for cpprest library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki cpprest
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libstdc++-devel >= 6:4.7
+Requires:	boost-devel >= 1.66
+Requires:	libstdc++-devel >= 6:5
 
 %description devel
 Header files for cpprest library.
@@ -54,6 +58,8 @@ Pliki nagłówkowe biblioteki cpprest.
 %prep
 %setup -q
 %patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
 
 %build
 install -d build
@@ -77,11 +83,11 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc CONTRIBUTORS.txt README.md SECURITY.md ThirdPartyNotices.txt changelog.md license.txt
-%attr(755,root,root) %{_libdir}/libcpprest.so.2.10
+%{_libdir}/libcpprest.so.2.10
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libcpprest.so
+%{_libdir}/libcpprest.so
 %{_includedir}/cpprest
 %{_includedir}/pplx
 %{_libdir}/cmake/cpprestsdk
